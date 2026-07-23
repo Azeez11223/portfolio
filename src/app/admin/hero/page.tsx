@@ -35,7 +35,7 @@ export default function HeroAdminPage() {
   useEffect(() => {
     fetch("/api/admin/hero")
       .then((res) => (res.ok ? res.json() : {}))
-      .then((data) => {
+      .then((data: any) => {
         setFormData({
           profile: data.profile || {
             name: "",

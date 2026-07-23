@@ -19,7 +19,7 @@ export default function EducationPage() {
   useEffect(() => {
     fetch("/api/admin/education")
       .then((res) => (res.ok ? res.json() : {}))
-      .then((data) => {
+      .then((data: any) => {
         if (data && typeof data === "object") {
           setFormData({
             degree: data.degree || "",

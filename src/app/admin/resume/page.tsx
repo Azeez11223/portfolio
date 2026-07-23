@@ -16,7 +16,7 @@ export default function ResumePage() {
   const fetchResumeStatus = () => {
     fetch("/api/admin/resume")
       .then((res) => (res.ok ? res.json() : {}))
-      .then((data) => {
+      .then((data: any) => {
         setHasResume(!!data.exists);
         setResumeUrl(data.resumeUrl || null);
       })

@@ -51,7 +51,7 @@ export default function SettingsPage() {
   useEffect(() => {
     fetch("/api/admin/settings")
       .then((res) => (res.ok ? res.json() : {}))
-      .then((data) => {
+      .then((data: any) => {
         setFormData({
           defaultTheme: data.defaultTheme || "dark",
           logoText: data.logoText || "MA",

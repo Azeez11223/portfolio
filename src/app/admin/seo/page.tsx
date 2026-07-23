@@ -16,7 +16,7 @@ export default function SeoPage() {
   useEffect(() => {
     fetch("/api/admin/seo")
       .then(res => res.ok ? res.json() : {})
-      .then(data => setFormData(data))
+      .then((data: any) => setFormData(data))
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
