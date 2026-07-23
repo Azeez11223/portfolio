@@ -1,0 +1,174 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Profile (singleton) ──────────────────────
+model Profile {
+  id             String   @id @default("singleton")
+  name           String
+  firstName      String
+  title          String
+  tagline        String
+  location       String
+  email          String
+  phone          String
+  linkedin       String
+  github         String
+  githubUsername  String
+  availability   String
+  resumeUrl      String?
+  avatarUrl      String?
+  gradYear       Int
+  cgpa           String
+  updatedAt      DateTime @updatedAt
+}
+
+// ─── Career Objective (singleton) ─────────────
+model CareerObjective {
+  id        String   @id @default("singleton")
+  short     String
+  long      String
+  updatedAt DateTime @updatedAt
+}
+
+// ─── Hero Roles ───────────────────────────────
+model HeroRole {
+  id        String @id @default(cuid())
+  text      String
+  sortOrder Int    @default(0)
+}
+
+// ─── Stats ────────────────────────────────────
+model Stat {
+  id        String @id @default(cuid())
+  value     Int
+  suffix    String @default("")
+  label     String
+  sortOrder Int    @default(0)
+}
+
+// ─── Experience ───────────────────────────────
+model Experience {
+  id        String   @id @default(cuid())
+  role      String
+  company   String
+  duration  String
+  current   Boolean  @default(false)
+  bullets   String   // JSON array of strings
+  tech      String   // JSON array of strings
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ─── Project ──────────────────────────────────
+model Project {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  category    String
+  oneLiner    String
+  description String
+  problem     String
+  solution    String
+  features    String   // JSON array
+  tech        String   // JSON array
+  impact      String   // JSON array
+  duration    String?
+  repoUrl     String?
+  liveUrl     String?
+  challenges  String?
+  imageUrl    String?
+  bannerUrl   String?
+  featured    Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ─── Skill Groups ─────────────────────────────
+model SkillGroup {
+  id        String   @id @default(cuid())
+  category  String
+  skills    String   // JSON: [{name, tier}]
+  sortOrder Int      @default(0)
+  updatedAt DateTime @updatedAt
+}
+
+// ─── Education (singleton) ────────────────────
+model Education {
+  id          String   @id @default("singleton")
+  degree      String
+  institution String
+  location    String
+  duration    String
+  cgpa        String
+  updatedAt   DateTime @updatedAt
+}
+
+// ─── Certification ────────────────────────────
+model Certification {
+  id            String   @id @default(cuid())
+  name          String
+  issuer        String
+  credentialUrl String?
+  sortOrder     Int      @default(0)
+  updatedAt     DateTime @updatedAt
+}
+
+// ─── Navigation Links ─────────────────────────
+model NavLink {
+  id        String @id @default(cuid())
+  label     String
+  href      String
+  sortOrder Int    @default(0)
+}
+
+// ─── Contact Message ──────────────────────────
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  status    String   @default("unread")
+  createdAt DateTime @default(now())
+}
+
+// ─── SEO Settings (singleton) ─────────────────
+model SeoSettings {
+  id                 String   @id @default("singleton")
+  siteTitle          String
+  siteDescription    String
+  keywords           String   // JSON array
+  ogTitle            String?
+  ogDescription      String?
+  ogImage            String?
+  twitterCard        String   @default("summary_large_image")
+  twitterTitle       String?
+  twitterDescription String?
+  siteUrl            String   @default("https://mdazeezsoftdev.vercel.app")
+  updatedAt          DateTime @updatedAt
+}
+
+// ─── Site Settings (singleton) ────────────────
+model SiteSettings {
+  id                 String   @id @default("singleton")
+  defaultTheme       String   @default("dark")
+  faviconUrl         String?
+  logoText           String   @default("MA")
+  sectionsVisibility String?
+  updatedAt          DateTime @updatedAt
+}
+
+// ─── Auth Session ─────────────────────────────
+model Session {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}

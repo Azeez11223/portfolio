@@ -1,0 +1,18 @@
+{
+  "defaultTheme": "light",
+  "logoText": "MA",
+  "faviconUrl": null,
+  "sectionsVisibility": {
+    "hero": true,
+    "about": true,
+    "experience": true,
+    "education": true,
+    "skills": true,
+    "projects": true,
+    "github": true,
+    "certifications": true,
+    "resume": true,
+    "contact": true,
+    "socialLinks": true
+  }
+}

@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #0a0d12;
+  --bg-elevated: #0d1117;
+  --surface: rgba(255, 255, 255, 0.035);
+  --surface-border: rgba(255, 255, 255, 0.09);
+  --text-primary: #f2f4f6;
+  --text-muted: #93a0ae;
+  --accent: #f0a83c;
+  --accent-strong: #ffbc5c;
+  --accent-soft: rgba(240, 168, 60, 0.14);
+  --secondary: #6f8bd4;
+  --secondary-soft: rgba(111, 139, 212, 0.14);
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --error: #f87171;
+  --border-hairline: rgba(255, 255, 255, 0.09);
+}
+
+[data-theme="light"] {
+  --bg: #f6f5f2;
+  --bg-elevated: #ffffff;
+  --surface: rgba(10, 13, 18, 0.03);
+  --surface-border: rgba(10, 13, 18, 0.08);
+  --text-primary: #12151a;
+  --text-muted: #565f6b;
+  --accent: #c07a12;
+  --accent-strong: #a5670c;
+  --accent-soft: rgba(192, 122, 18, 0.12);
+  --secondary: #3f5aa8;
+  --secondary-soft: rgba(63, 90, 168, 0.1);
+  --border-hairline: rgba(10, 13, 18, 0.08);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-surface: var(--surface);
+  --color-text-primary: var(--text-primary);
+  --color-text-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-secondary: var(--secondary);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --font-display: var(--font-space-grotesk);
+  --font-body: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+}
+
+* {
+  border-color: var(--border-hairline);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+html, header, nav, section, div, button, input, textarea, a {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--text-primary);
+}
+
+.glass {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface-border);
+  border-radius: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.todo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(248, 113, 113, 0.12);
+  color: var(--error);
+  border: 1px dashed rgba(248, 113, 113, 0.4);
+}
