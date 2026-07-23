@@ -17,21 +17,28 @@ export default function EducationPage() {
   });
 
   useEffect(() => {
-    fetch("/api/admin/education")
-      .then((res) => (res.ok ? res.json() : {}))
-      .then((data: any) => {
-        if (data && typeof data === "object") {
-          setFormData({
-            degree: data.degree || "",
-            institution: data.institution || "",
-            location: data.location || "",
-            duration: data.duration || "",
-            cgpa: data.cgpa || "",
-          });
+    async function loadData() {
+      try {
+        const res = await fetch("/api/admin/education");
+        if (res.ok) {
+          const data: any = await res.json();
+          if (data && typeof data === "object") {
+            setFormData({
+              degree: data.degree || "",
+              institution: data.institution || "",
+              location: data.location || "",
+              duration: data.duration || "",
+              cgpa: data.cgpa || "",
+            });
+          }
         }
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false));
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
   }, []);
 
   const handleSave = async () => {
