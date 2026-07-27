@@ -29,16 +29,17 @@ export async function setSessionCookie(token: string) {
 
 export async function getSession() {
   const cookieStore = await cookies();
-  const token = cookieStore.get(SESSION_COOKIE)?.value;
+  const token = cookieStore.get("admin_session")?.value;
+
+  console.log("Cookie token:", token);
+
   if (!token) return null;
 
-  const session = await db.session.findUnique({ where: { token } });
-  if (!session) return null;
+  const session = await db.session.findUnique({
+    where: { token },
+  });
 
-  if (session.expiresAt < new Date()) {
-    await db.session.delete({ where: { id: session.id } });
-    return null;
-  }
+  console.log("DB session:", session);
 
   return session;
 }
