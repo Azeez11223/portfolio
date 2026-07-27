@@ -44,7 +44,7 @@ export function AdminSidebar({ unreadCount = 0 }: { unreadCount?: number }) {
         toast.success("Logged out successfully");
         router.push("/admin/login");
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to log out");
     }
   };

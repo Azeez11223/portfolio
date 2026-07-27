@@ -267,6 +267,7 @@ async function seed() {
   console.log("  ✓ Projects");
 
   // ─── Skill Groups ─────────────────────────────
+  await prisma.skillGroup.deleteMany();
   const skillGroups = [
     {
       category: "Programming",
@@ -376,6 +377,7 @@ async function seed() {
   console.log("  ✓ Education");
 
   // ─── Certifications ───────────────────────────
+  await prisma.certification.deleteMany();
   const certifications = [
     { name: "Java", issuer: "HackerRank" },
     { name: "SQL (Intermediate)", issuer: "HackerRank" },
@@ -389,6 +391,7 @@ async function seed() {
   console.log("  ✓ Certifications");
 
   // ─── Nav Links ────────────────────────────────
+  await prisma.navLink.deleteMany();
   const navLinks = [
     { label: "About", href: "#about" },
     { label: "Experience", href: "#experience" },

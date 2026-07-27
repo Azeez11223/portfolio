@@ -1,6 +1,6 @@
 import { db } from "./db";
 import { cookies } from "next/headers";
-import { randomUUID } from "crypto";
+import crypto, { randomUUID } from "crypto";
 
 const SESSION_COOKIE = "admin_session";
 const SESSION_MAX_AGE = 24 * 60 * 60 * 1000; // 24 hours
@@ -29,7 +29,7 @@ export async function setSessionCookie(token: string) {
 
 export async function getSession() {
   const cookieStore = await cookies();
-  const token = cookieStore.get("admin_session")?.value;
+  const token = cookieStore.get(SESSION_COOKIE)?.value;
 
   console.log("=== SESSION DEBUG ===");
   console.log("Cookie token:", token);
@@ -84,12 +84,10 @@ function timingSafeCompare(a: string, b: string): boolean {
 
   if (bufA.length !== bufB.length) {
     // Compare against self to maintain constant time
-    const crypto = require("crypto");
     crypto.timingSafeEqual(bufA, bufA);
     return false;
   }
 
-  const crypto = require("crypto");
   return crypto.timingSafeEqual(bufA, bufB);
 }
 

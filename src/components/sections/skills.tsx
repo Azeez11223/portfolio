@@ -43,7 +43,7 @@ export function Skills({ groups }: { groups: SkillGroupData[] }) {
             (shipped production work),{" "}
             <strong className="text-[var(--secondary)]">Working Knowledge</strong>{" "}
             (project-level), and <strong>Familiar</strong> (classroom / intro) — so
-            nobody has to guess what "proficient" means.
+            nobody has to guess what &quot;proficient&quot; means.
           </>
         }
       />

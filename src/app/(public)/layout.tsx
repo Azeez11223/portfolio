@@ -24,7 +24,7 @@ const DEFAULT_SECTIONS_VISIBILITY = {
 };
 
 async function getSectionsVisibility() {
-  let visibility = DEFAULT_SECTIONS_VISIBILITY;
+  const visibility = DEFAULT_SECTIONS_VISIBILITY;
 
   if (existsSync(SETTINGS_FILE)) {
     try {

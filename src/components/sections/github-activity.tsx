@@ -44,7 +44,7 @@ export function GithubActivity({ username, name, github }: GithubActivityProps) 
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [username]);
 
   return (
     <section id="github" className="mx-auto max-w-6xl px-6 py-24 sm:py-32">
