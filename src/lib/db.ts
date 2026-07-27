@@ -10,7 +10,7 @@ function getDbUrl() {
   if (envUrl && !envUrl.startsWith("file:./")) {
     return envUrl;
   }
-  const dbPath = path.join(process.cwd(), "prisma", "dev.db");
+  const dbPath = path.join(process.cwd(), "prisma", "dev.db").replace(/\\/g, "/");
   return `file:${dbPath}`;
 }
 

@@ -118,6 +118,7 @@ model Certification {
   name          String
   issuer        String
   credentialUrl String?
+  imageUrl      String?
   sortOrder     Int      @default(0)
   updatedAt     DateTime @updatedAt
 }

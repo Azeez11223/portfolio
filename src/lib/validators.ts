@@ -101,9 +101,25 @@ export const educationSchema = z.object({
 
 // ─── Certification ────────────────────────────
 export const certificationSchema = z.object({
-  name: z.string().min(1).max(200),
-  issuer: z.string().min(1).max(200),
-  credentialUrl: z.string().url().or(z.string().length(0)).optional().nullable(),
+  name: z.string().min(1, "Name is required").max(200),
+  issuer: z.string().min(1, "Issuer is required").max(200),
+  credentialUrl: z
+    .string()
+    .optional()
+    .nullable()
+    .transform((val) => {
+      if (!val || !val.trim()) return null;
+      let v = val.trim();
+      if (!/^https?:\/\//i.test(v)) {
+        v = `https://${v}`;
+      }
+      return v;
+    }),
+  imageUrl: z
+    .string()
+    .optional()
+    .nullable()
+    .transform((val) => (val && val.trim() ? val.trim() : null)),
   sortOrder: z.number().int().min(0).optional(),
 });
 
