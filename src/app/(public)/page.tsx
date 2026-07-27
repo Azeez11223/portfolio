@@ -42,8 +42,7 @@ async function getSectionsVisibility() {
   }
 
   try {
-    const rows: any[] = await db.$queryRawUnsafe(`SELECT * FROM "SiteSettings" WHERE "id" = 'singleton'`);
-    const settings = rows[0] || null;
+    const settings = await db.siteSettings.findUnique({ where: { id: "singleton" } });
     if (settings?.sectionsVisibility) {
       const parsed = typeof settings.sectionsVisibility === "string" ? JSON.parse(settings.sectionsVisibility) : settings.sectionsVisibility;
       return { ...DEFAULT_SECTIONS_VISIBILITY, ...parsed };

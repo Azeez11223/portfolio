@@ -48,8 +48,7 @@ export async function GET() {
   try {
     let settings: any = null;
     try {
-      const rows: any[] = await db.$queryRawUnsafe(`SELECT * FROM "SiteSettings" WHERE "id" = 'singleton'`);
-      settings = rows[0] || null;
+      settings = await db.siteSettings.findUnique({ where: { id: "singleton" } });
     } catch {
       // ignore
     }
@@ -106,25 +105,24 @@ export async function PUT(req: Request) {
 
     // Attempt DB write as well
     try {
-      await db.$executeRawUnsafe(
-        `INSERT OR REPLACE INTO "SiteSettings" ("id", "defaultTheme", "logoText", "faviconUrl", "sectionsVisibility", "updatedAt") VALUES ('singleton', ?, ?, ?, ?, CURRENT_TIMESTAMP)`,
-        defaultTheme,
-        logoText,
-        faviconUrl,
-        JSON.stringify(mergedVisibility)
-      );
-    } catch {
-      // DB column might be missing in active connection cache, file backup persists state 100%
-      try {
-        await db.$executeRawUnsafe(
-          `INSERT OR REPLACE INTO "SiteSettings" ("id", "defaultTheme", "logoText", "faviconUrl", "updatedAt") VALUES ('singleton', ?, ?, ?, CURRENT_TIMESTAMP)`,
+      await db.siteSettings.upsert({
+        where: { id: "singleton" },
+        update: {
           defaultTheme,
           logoText,
-          faviconUrl
-        );
-      } catch {
-        // ignore DB fallback errors
-      }
+          faviconUrl,
+          sectionsVisibility: JSON.stringify(mergedVisibility),
+        },
+        create: {
+          id: "singleton",
+          defaultTheme,
+          logoText,
+          faviconUrl,
+          sectionsVisibility: JSON.stringify(mergedVisibility),
+        },
+      });
+    } catch {
+      // ignore DB fallback errors
     }
 
     return NextResponse.json({
