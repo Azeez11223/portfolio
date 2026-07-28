@@ -56,11 +56,30 @@ export default async function PublicLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [navLinks, profile, sectionsVisibility] = await Promise.all([
-    db.navLink.findMany({ orderBy: { sortOrder: "asc" } }),
-    db.profile.findUnique({ where: { id: "singleton" } }),
-    getSectionsVisibility(),
-  ]);
+  let navLinks: { label: string; href: string }[] = [
+    { label: "About", href: "#about" },
+    { label: "Experience", href: "#experience" },
+    { label: "Projects", href: "#projects" },
+    { label: "Skills", href: "#skills" },
+    { label: "Contact", href: "#contact" },
+  ];
+  let profile: any = null;
+  let sectionsVisibility = DEFAULT_SECTIONS_VISIBILITY;
+
+  try {
+    const [fetchedNav, fetchedProfile, fetchedVisibility] = await Promise.all([
+      db.navLink.findMany({ orderBy: { sortOrder: "asc" } }),
+      db.profile.findUnique({ where: { id: "singleton" } }),
+      getSectionsVisibility(),
+    ]);
+    if (fetchedNav && fetchedNav.length > 0) {
+      navLinks = fetchedNav;
+    }
+    profile = fetchedProfile;
+    sectionsVisibility = fetchedVisibility;
+  } catch (err) {
+    console.warn("Failed to load PublicLayout data from database:", err);
+  }
 
   const filteredNav = navLinks
     .filter((n) => {
@@ -84,7 +103,13 @@ export default async function PublicLayout({
         github: profile.github,
         resumeUrl: profile.resumeUrl,
       }
-    : null;
+    : {
+        name: "Mohammed Abdul Azeez S",
+        email: "mdazeezsoftdev@gmail.com",
+        linkedin: "https://linkedin.com/in/mohammed-abdul-azeez-b876b5301",
+        github: "https://github.com/Azeez11223",
+        resumeUrl: "/resume.pdf",
+      };
 
   return (
     <>
@@ -96,3 +121,5 @@ export default async function PublicLayout({
     </>
   );
 }
+
+

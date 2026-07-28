@@ -41,7 +41,8 @@ export default function EducationPage() {
     loadData();
   }, []);
 
-  const handleSave = async () => {
+  const handleSave = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     setSaving(true);
     try {
       const res = await fetch("/api/admin/education", {
@@ -66,10 +67,10 @@ export default function EducationPage() {
   if (loading) return <div className="text-gray-400">Loading education...</div>;
 
   return (
-    <div className="space-y-6">
+    <form onSubmit={handleSave} className="space-y-6">
       <AdminHeader title="Education" description="Manage your academic background">
         <button
-          onClick={handleSave}
+          type="submit"
           disabled={saving}
           className="flex items-center gap-2 bg-amber-500 text-black px-4 py-2.5 rounded-lg font-medium hover:bg-amber-600 disabled:opacity-50 transition-colors cursor-pointer"
         >
@@ -135,6 +136,6 @@ export default function EducationPage() {
           />
         </div>
       </div>
-    </div>
+    </form>
   );
 }

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { AdminHeader } from "@/components/admin/admin-header";
 import { toast } from "sonner";
-import { Save, Plus, Trash2, Upload, User, Image as ImageIcon } from "lucide-react";
+import { Save, Plus, Trash2, Upload, User } from "lucide-react";
 
 export default function HeroAdminPage() {
   const [loading, setLoading] = useState(true);
@@ -90,11 +90,13 @@ export default function HeroAdminPage() {
     } catch (err: any) {
       toast.error(err.message || "Failed to upload profile photo");
     } finally {
+      e.target.value = "";
       setUploadingAvatar(false);
     }
   };
 
-  const handleSave = async () => {
+  const handleSave = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     setSaving(true);
     try {
       const res = await fetch("/api/admin/hero", {
@@ -108,7 +110,7 @@ export default function HeroAdminPage() {
           },
         }),
       });
-      if (res.ok) toast.success("Hero section & profile updated");
+      if (res.ok) toast.success("Hero section & profile updated successfully");
       else {
         const err = await res.json();
         throw new Error(err.error || "Update failed");
@@ -151,10 +153,10 @@ export default function HeroAdminPage() {
   const currentAvatar = formData.profile?.avatarUrl;
 
   return (
-    <div className="space-y-6 max-w-4xl">
+    <form onSubmit={handleSave} className="space-y-6 max-w-4xl">
       <AdminHeader title="Hero & Profile Section" description="Manage main header, profile photo, bio, and key stats">
         <button
-          onClick={handleSave}
+          type="submit"
           disabled={saving}
           className="flex items-center gap-2 bg-amber-500 text-black px-4 py-2.5 rounded-lg font-medium hover:bg-amber-600 cursor-pointer disabled:opacity-50"
         >
@@ -258,6 +260,7 @@ export default function HeroAdminPage() {
           <div>
             <label className="block text-sm text-gray-400 mb-1">Email</label>
             <input
+              type="email"
               className="w-full bg-[#0f1117] border border-[#2a2d37] text-white rounded-lg px-4 py-2.5 focus:border-amber-500 focus:outline-none"
               value={formData.profile?.email || ""}
               onChange={(e) => setFormData({ ...formData, profile: { ...formData.profile, email: e.target.value } })}
@@ -282,17 +285,21 @@ export default function HeroAdminPage() {
           <div>
             <label className="block text-sm text-gray-400 mb-1">LinkedIn URL</label>
             <input
+              type="text"
               className="w-full bg-[#0f1117] border border-[#2a2d37] text-white rounded-lg px-4 py-2.5 focus:border-amber-500 focus:outline-none"
               value={formData.profile?.linkedin || ""}
               onChange={(e) => setFormData({ ...formData, profile: { ...formData.profile, linkedin: e.target.value } })}
+              placeholder="https://linkedin.com/in/..."
             />
           </div>
           <div>
             <label className="block text-sm text-gray-400 mb-1">GitHub URL</label>
             <input
+              type="text"
               className="w-full bg-[#0f1117] border border-[#2a2d37] text-white rounded-lg px-4 py-2.5 focus:border-amber-500 focus:outline-none"
               value={formData.profile?.github || ""}
               onChange={(e) => setFormData({ ...formData, profile: { ...formData.profile, github: e.target.value } })}
+              placeholder="https://github.com/..."
             />
           </div>
           <div>
@@ -340,7 +347,7 @@ export default function HeroAdminPage() {
       <div className="bg-[#1a1d27] border border-[#2a2d37] rounded-xl p-6 space-y-4">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-semibold text-white">Hero Roles (Rotating Titles)</h2>
-          <button onClick={addRole} className="flex items-center gap-1 text-sm bg-amber-500/10 text-amber-500 hover:bg-amber-500/20 px-3 py-1.5 rounded-lg">
+          <button type="button" onClick={addRole} className="flex items-center gap-1 text-sm bg-amber-500/10 text-amber-500 hover:bg-amber-500/20 px-3 py-1.5 rounded-lg">
             <Plus className="w-4 h-4" /> Add Role
           </button>
         </div>
@@ -357,7 +364,7 @@ export default function HeroAdminPage() {
                 }}
                 placeholder="e.g. Java Full Stack Developer"
               />
-              <button onClick={() => removeRole(idx)} className="p-2 text-red-400 hover:bg-red-500/10 rounded-lg">
+              <button type="button" onClick={() => removeRole(idx)} className="p-2 text-red-400 hover:bg-red-500/10 rounded-lg">
                 <Trash2 className="w-4 h-4" />
               </button>
             </div>
@@ -369,7 +376,7 @@ export default function HeroAdminPage() {
       <div className="bg-[#1a1d27] border border-[#2a2d37] rounded-xl p-6 space-y-4">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-semibold text-white">Key Stats Counter</h2>
-          <button onClick={addStat} className="flex items-center gap-1 text-sm bg-amber-500/10 text-amber-500 hover:bg-amber-500/20 px-3 py-1.5 rounded-lg">
+          <button type="button" onClick={addStat} className="flex items-center gap-1 text-sm bg-amber-500/10 text-amber-500 hover:bg-amber-500/20 px-3 py-1.5 rounded-lg">
             <Plus className="w-4 h-4" /> Add Stat
           </button>
         </div>
@@ -409,13 +416,13 @@ export default function HeroAdminPage() {
                   setFormData({ ...formData, stats: updated });
                 }}
               />
-              <button onClick={() => removeStat(idx)} className="p-2 text-red-400 hover:bg-red-500/10 rounded-lg justify-self-start sm:justify-self-center">
+              <button type="button" onClick={() => removeStat(idx)} className="p-2 text-red-400 hover:bg-red-500/10 rounded-lg justify-self-start sm:justify-self-center">
                 <Trash2 className="w-4 h-4" />
               </button>
             </div>
           ))}
         </div>
       </div>
-    </div>
+    </form>
   );
 }

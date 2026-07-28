@@ -1,5 +1,19 @@
 import { z } from "zod";
 
+const optionalUrlTransform = () =>
+  z
+    .string()
+    .optional()
+    .nullable()
+    .transform((val) => {
+      if (!val || !val.trim()) return null;
+      let v = val.trim();
+      if (!/^https?:\/\//i.test(v)) {
+        v = `https://${v}`;
+      }
+      return v;
+    });
+
 // ─── Auth ─────────────────────────────────────
 export const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -15,8 +29,8 @@ export const profileSchema = z.object({
   location: z.string().min(1).max(200),
   email: z.string().email(),
   phone: z.string().min(1).max(30),
-  linkedin: z.string().url().or(z.string().length(0)).optional(),
-  github: z.string().url().or(z.string().length(0)).optional(),
+  linkedin: optionalUrlTransform(),
+  github: optionalUrlTransform(),
   githubUsername: z.string().min(1).max(50),
   availability: z.string().min(1).max(100),
   resumeUrl: z.string().optional().nullable(),
@@ -51,26 +65,26 @@ export const experienceSchema = z.object({
   company: z.string().min(1).max(200),
   duration: z.string().min(1).max(100),
   current: z.boolean().optional(),
-  bullets: z.array(z.string().min(1)),
-  tech: z.array(z.string().min(1)),
+  bullets: z.array(z.string()),
+  tech: z.array(z.string()),
   sortOrder: z.number().int().min(0).optional(),
 });
 
 // ─── Project ──────────────────────────────────
 export const projectSchema = z.object({
-  slug: z.string().min(1).max(100).regex(/^[a-z0-9-]+$/),
+  slug: z.string().min(1).max(100),
   title: z.string().min(1).max(200),
   category: z.string().min(1).max(100),
   oneLiner: z.string().min(1).max(500),
   description: z.string().min(1),
   problem: z.string().min(1),
   solution: z.string().min(1),
-  features: z.array(z.string().min(1)),
-  tech: z.array(z.string().min(1)),
+  features: z.array(z.string()),
+  tech: z.array(z.string()),
   impact: z.array(z.string()),
   duration: z.string().optional().nullable(),
-  repoUrl: z.string().url().or(z.string().length(0)).optional().nullable(),
-  liveUrl: z.string().url().or(z.string().length(0)).optional().nullable(),
+  repoUrl: optionalUrlTransform(),
+  liveUrl: optionalUrlTransform(),
   challenges: z.string().optional().nullable(),
   imageUrl: z.string().optional().nullable(),
   bannerUrl: z.string().optional().nullable(),
@@ -84,7 +98,7 @@ export const skillGroupSchema = z.object({
   skills: z.array(
     z.object({
       name: z.string().min(1).max(100),
-      tier: z.enum(["Core", "Working Knowledge", "Familiar"]),
+      tier: z.string().min(1),
     })
   ),
   sortOrder: z.number().int().min(0).optional(),
@@ -103,18 +117,7 @@ export const educationSchema = z.object({
 export const certificationSchema = z.object({
   name: z.string().min(1, "Name is required").max(200),
   issuer: z.string().min(1, "Issuer is required").max(200),
-  credentialUrl: z
-    .string()
-    .optional()
-    .nullable()
-    .transform((val) => {
-      if (!val || !val.trim()) return null;
-      let v = val.trim();
-      if (!/^https?:\/\//i.test(v)) {
-        v = `https://${v}`;
-      }
-      return v;
-    }),
+  credentialUrl: optionalUrlTransform(),
   imageUrl: z
     .string()
     .optional()
@@ -141,7 +144,7 @@ export const seoSchema = z.object({
   twitterCard: z.string().optional(),
   twitterTitle: z.string().optional().nullable(),
   twitterDescription: z.string().optional().nullable(),
-  siteUrl: z.string().url(),
+  siteUrl: optionalUrlTransform(),
 });
 
 // ─── Site Settings ────────────────────────────

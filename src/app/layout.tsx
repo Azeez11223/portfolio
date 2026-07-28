@@ -22,12 +22,21 @@ const jetbrainsMono = JetBrains_Mono({
   weight: ["400", "500"],
 });
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(): Promise<Metadata> {
-  const seo = await db.seoSettings.findUnique({ where: { id: "singleton" } });
-  const profile = await db.profile.findUnique({ where: { id: "singleton" } });
+  let seo = null;
+  let profile = null;
+
+  try {
+    seo = await db.seoSettings.findUnique({ where: { id: "singleton" } });
+    profile = await db.profile.findUnique({ where: { id: "singleton" } });
+  } catch (err) {
+    console.warn("Failed to load metadata from database:", err);
+  }
 
   const siteUrl = seo?.siteUrl ?? "https://mdazeezsoftdev.vercel.app";
-  const title = seo?.siteTitle ?? `${profile?.name ?? "Portfolio"} — Java Full Stack Developer`;
+  const title = seo?.siteTitle ?? `${profile?.name ?? "Mohammed Abdul Azeez S"} — Java Full Stack Developer`;
   const description = seo?.siteDescription ?? "";
   const keywords = seo?.keywords ? JSON.parse(seo.keywords) : [];
 
@@ -62,7 +71,12 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const profile = await db.profile.findUnique({ where: { id: "singleton" } });
+  let profile = null;
+  try {
+    profile = await db.profile.findUnique({ where: { id: "singleton" } });
+  } catch (err) {
+    console.warn("Failed to load profile in RootLayout from database:", err);
+  }
 
   const jsonLd = profile
     ? {
@@ -108,3 +122,4 @@ export default async function RootLayout({
     </html>
   );
 }
+

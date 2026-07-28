@@ -60,6 +60,7 @@ export default function ResumePage() {
     } catch (err: any) {
       toast.error(err.message || "Failed to upload resume");
     } finally {
+      e.target.value = "";
       setUploading(false);
     }
   };

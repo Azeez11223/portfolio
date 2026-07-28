@@ -77,6 +77,7 @@ export default function CertificationsPage() {
     } catch (err: any) {
       toast.error(err.message || "Failed to upload certificate image");
     } finally {
+      e.target.value = "";
       setUploadingImg(false);
     }
   };
@@ -259,7 +260,7 @@ export default function CertificationsPage() {
               <div>
                 <label className="block text-sm text-gray-400 mb-1">Live Credential Link (Optional)</label>
                 <input
-                  type="url"
+                  type="text"
                   className="w-full bg-[#0f1117] border border-[#2a2d37] text-white rounded-lg px-3 py-2 text-sm focus:border-amber-500 focus:outline-none"
                   value={formData.credentialUrl}
                   onChange={(e) => setFormData({ ...formData, credentialUrl: e.target.value })}

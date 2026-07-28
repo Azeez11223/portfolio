@@ -125,6 +125,7 @@ export default function ProjectsPage() {
       toast.error(err.message || "Failed to upload image");
       setLocalImagePreview(null);
     } finally {
+      e.target.value = "";
       setUploadingImg(false);
     }
   };
@@ -164,6 +165,8 @@ export default function ProjectsPage() {
       }
     } catch (err: any) {
       toast.error(err.message || "Failed to update image");
+    } finally {
+      e.target.value = "";
     }
   };
 
@@ -494,7 +497,7 @@ export default function ProjectsPage() {
                 <div>
                   <label className="block text-sm text-gray-400 mb-1">Repository URL (GitHub)</label>
                   <input
-                    type="url"
+                    type="text"
                     className="w-full bg-[#0f1117] border border-[#2a2d37] text-white rounded-lg px-3 py-2 text-sm focus:border-amber-500 focus:outline-none"
                     value={formData.repoUrl}
                     onChange={(e) => setFormData({ ...formData, repoUrl: e.target.value })}
@@ -504,7 +507,7 @@ export default function ProjectsPage() {
                 <div>
                   <label className="block text-sm text-gray-400 mb-1">Live URL (Demo)</label>
                   <input
-                    type="url"
+                    type="text"
                     className="w-full bg-[#0f1117] border border-[#2a2d37] text-white rounded-lg px-3 py-2 text-sm focus:border-amber-500 focus:outline-none"
                     value={formData.liveUrl}
                     onChange={(e) => setFormData({ ...formData, liveUrl: e.target.value })}
